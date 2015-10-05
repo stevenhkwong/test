@@ -17,6 +17,7 @@ centos1 host=centos1
 centos2 host=centos2
 centos3 host=centos3
 centos4 host=centos4
+centos5 host=centos5
 centos7-test host=centos7-test
 
 [home]
