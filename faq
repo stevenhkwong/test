@@ -1,3 +1,5 @@
 To check facts on a host:
 -------------------------
 	ansible -i hosts centos7-test -m setup
+
+ansible-playbook -i hosts2 pb-check-switch.yml --syntax-check
