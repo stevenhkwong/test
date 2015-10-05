@@ -1,0 +1,19 @@
+
+
+[all]
+dc1
+dc2
+
+[dc1:vars]
+location="california silicon-valley"
+
+[dc1]
+switch-sv[01:50]
+
+
+[dc2:vars]
+location="singapore bukit-timah"
+
+[dc2]
+switch-sg[01:50]
+

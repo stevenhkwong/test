@@ -1,0 +1,62 @@
+
+---
+
+- hosts: ~switch-sv(01|02)
+  remote_user: swong
+
+  tasks:
+     - include: facts.yml
+
+     - debug: msg="location is {{location}}"
+     - debug: msg="switch is {{ansible_hostname}}"
+
+     - name: "raw module: eg"
+       raw: /usr/sbin/ifconfig 
+       register: result
+
+     - debug: msg="result is {{result.stdout_lines}}"
+
+     - name: file module - Create a symlink in /tmp for the hosts file
+       file: src=/etc/hosts dest=/tmp/hosts owner=root group=root state=link
+       sudo: yes
+
+     - name: template module 
+       template: src=test.tpl dest=/tmp/test.out owner=root group=root mode=644
+       sudo: yes
+
+
+#     - name: Install '{{package_name}}'
+#       yum: name={{package_name}} state=latest
+#       sudo: yes
+#
+#     - shell: /usr/bin/uptime 
+#       register: uptime
+#
+#     - debug: msg="shell out is {{uptime.stdout_lines}}"
+#
+#     - name: Starting httpd service
+#       service: name=httpd state=started
+#       sudo: yes
+#
+#     - shell: echo "START ----- `date` " >> /tmp/ansible.log
+#
+#     - name: prompt New package to install
+#       pause: prompt="Provide the package name which you want to install "
+#       register: new_package_name
+#
+#     - debug: msg="register new_package_name is {{new_package_name.user_input}}"
+#
+#     - shell: echo "installing" {{new_package_name.user_input}} >> /tmp/ansible.log
+#
+#     - name:  new package to install
+#       yum: name="{{new_package_name.user_input}}" state=latest
+#       sudo: yes
+#
+#     - shell: echo "installing" {{new_pack}} >> /tmp/ansible.log
+#     - debug: msg="installing {{new_pack}}"
+#     - name:  package to install
+#       yum: name="{{new_pack}}" state=latest
+#       sudo: yes
+#
+#    
+#    

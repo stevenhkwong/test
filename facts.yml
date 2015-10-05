@@ -1,0 +1,6 @@
+  - set_fact: web_package=httpd
+    when: ansible_os_family == "Redhat"
+  - set_fact: web_package=apache2
+    when: ansible_os_family == "Debian"
+  - set_fact: web_package=httpd
+

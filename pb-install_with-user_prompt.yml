@@ -1,0 +1,61 @@
+
+---
+
+- hosts: centos7-test
+  remote_user: swong
+
+
+  vars_prompt:
+
+    - name: "mypassword"
+      prompt: "Enter password"
+      private: yes
+
+    - name: "extra_package"
+      prompt: "Enter exptra package to install "
+      private: no
+      default: mtr
+
+  tasks:
+
+     - include: facts.yml
+
+     - debug: msg="web_package is {{web_package}}"
+
+     - shell: /usr/bin/uptime 
+       register: uptime
+
+     - debug: msg="shell out is {{uptime.stdout_lines}}"
+
+     - shell: echo "START ----- `date` " >> /tmp/ansible.log
+
+     - name: prompt again for extra package to install
+       pause: prompt="Provide the extra package name which you want to install (overiding {{extra_package}})"
+       register: extra_package
+
+     - debug: msg="register extra_package is {{extra_package.user_input}}"
+
+     - shell: echo "installing web_package " {{web_package}} >> /tmp/ansible.log
+     - debug: msg="installing web_package {{web_package}}"
+     - name: Install '{{web_packge}}'
+       yum: name={{web_package}} state=latest
+       sudo: yes
+
+     - shell: echo "installing extra package " {{extra_package.user_input}} >> /tmp/ansible.log
+       when: extra_package.user_input !=''
+     - debug: msg="installing extra package {{extra_package.user_input}}"
+       when: extra_package.user_input !=''
+     - name:  package to install
+       yum: name="{{extra_package.user_input}}" state=latest
+       when: extra_package.user_input !=''
+       sudo: yes
+
+     - shell: echo "starting" httpd >> /tmp/ansible.log
+     - debug: msg="starting httpd service "
+     - name: Starting web service
+       service: name=httpd state=started
+       sudo: yes
+
+     - shell: echo "EBD ----- `date` " >> /tmp/ansible.log
+    
+    
